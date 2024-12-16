@@ -1,34 +1,32 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-
 function Character({ children, ...props }) {
-    return (
-      <motion.span 
-        {...props} 
-        className="inline-block mr-[-0.05em]"
-      >
-        {children}
-      </motion.span>
-    );
-  }
+  return (
+    <motion.span {...props} className="inline-block mr-[-0.05em]">
+      {children}
+    </motion.span>
+  );
+}
 
-  function Word({ children, ...props }) {
-    return (
-      <motion.span 
-        {...props} 
-        className="inline-block mr-[0.25em] whitespace-nowrap"
-      >
-        {children}
-      </motion.span>
-    );
-  }
+function Word({ children, ...props }) {
+  return (
+    <motion.span
+      {...props}
+      className="inline-block mr-[0.25em] whitespace-nowrap"
+    >
+      {children}
+    </motion.span>
+  );
+}
 
-
-export default function HeaderTextSplashScreen() {
+export default function HeaderTextSplashScreen({
+  onTextHoverEnter,
+  onTextHoverLeave,
+}) {
   const text = "Josh and Rylie";
   const ctrls = useAnimation();
 
@@ -67,19 +65,21 @@ export default function HeaderTextSplashScreen() {
   };
 
   return (
-    <div className="text-center">
+    <div className="text-center text-pink-700	 dark:text-white">
       <h1
         ref={ref}
         aria-label={text}
         role="heading"
-        className="text-5xl font-bold mb-4"
+        className="text-6xl tracking-wide font-garamondPremiere font-bold mb-4"
+        onMouseEnter={onTextHoverEnter}
+        onMouseLeave={onTextHoverLeave}
       >
         {text.split(" ").map((word, wIndex) => (
           <Word
             key={wIndex}
             initial="hidden"
             animate={ctrls}
-            variants={wordAnimation}
+            variants={{ hidden: {}, visible: {} }}
             transition={{
               delayChildren: wIndex * 0.25,
               staggerChildren: 0.05,
@@ -89,7 +89,17 @@ export default function HeaderTextSplashScreen() {
             {word.split("").map((character, cIndex) => (
               <Character
                 key={cIndex}
-                variants={characterAnimation}
+                variants={{
+                  hidden: { opacity: 0, y: "0.25em" },
+                  visible: {
+                    opacity: 1,
+                    y: "0em",
+                    transition: {
+                      duration: 1,
+                      ease: [0.2, 0.65, 0.3, 0.9],
+                    },
+                  },
+                }}
                 aria-hidden="true"
               >
                 {character}
@@ -98,7 +108,14 @@ export default function HeaderTextSplashScreen() {
           </Word>
         ))}
       </h1>
-      <p className="text-xl">July 19, 2024</p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 3 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.9 }}
+      >
+        <p className="text-xl">July 19, 2024</p>
+      </motion.div>
     </div>
   );
 }

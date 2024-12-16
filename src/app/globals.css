@@ -2,12 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+
+html, body {
+  font-family: var(--font-neue-haas-medium);
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-neue-haas-medium: "neue-haas-grotesk-display", sans-serif;
+  --font-neue-haas-bold: "neue-haas-grotesk-display", sans-serif;
 }
 
-@media (prefers-color-scheme: light) {
+
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;

@@ -11,7 +11,14 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        'haasMedium': ['"neue-haas-grotesk-display"', 'sans-serif'],
+        'haasBold': ['"neue-haas-grotesk-display"', 'sans-serif'],
+        'garamondPro': ['"adobe-garamond-pro"', 'serif'],
+        'garamondPremiere': ['"garamond-premier-pro"', 'serif'],
+      },
     },
   },
   plugins: [],
+  darkMode: 'class',
 };
