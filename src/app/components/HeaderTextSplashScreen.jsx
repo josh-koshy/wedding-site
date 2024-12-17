@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
+
+
 function Character({ children, ...props }) {
   return (
     <motion.span {...props} className="inline-block mr-[-0.05em]">
@@ -65,12 +67,12 @@ export default function HeaderTextSplashScreen({
   };
 
   return (
-    <div className="text-center text-pink-700	 dark:text-white">
+    <div className="text-center  text-black	 dark:text-pink-300">
       <h1
         ref={ref}
         aria-label={text}
         role="heading"
-        className="text-6xl tracking-wide font-garamondPremiere font-bold mb-4"
+        className="text-4xl tracking-normal font-bold font-haasBold mb-4"
         onMouseEnter={onTextHoverEnter}
         onMouseLeave={onTextHoverLeave}
       >
@@ -112,9 +114,9 @@ export default function HeaderTextSplashScreen({
       <motion.div
         initial={{ opacity: 0, y: 3 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.9 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 1.5 }}
       >
-        <p className="text-xl">July 19, 2024</p>
+        <p className="text-xl font-haasMedium">July 19, 2024</p>
       </motion.div>
     </div>
   );

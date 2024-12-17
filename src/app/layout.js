@@ -1,11 +1,17 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
+import { Cookie } from 'next/font/google';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
+const cookie = Cookie({
+  subsets: ['latin'],
+  weight: '400' // Cookie only has one weight option, but specifying it doesn't hurt.
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -24,7 +30,7 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://use.typekit.net/ofp0tcu.css" />
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cookie.className} antialiased`}
       >
         {children}
       </body>

@@ -16,6 +16,7 @@ export default {
         'haasBold': ['"neue-haas-grotesk-display"', 'sans-serif'],
         'garamondPro': ['"adobe-garamond-pro"', 'serif'],
         'garamondPremiere': ['"garamond-premier-pro"', 'serif'],
+        'cookie': ['"Cookie"', 'cursive']
       },
     },
   },

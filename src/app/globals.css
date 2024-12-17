@@ -5,6 +5,19 @@
 
 html, body {
   font-family: var(--font-neue-haas-medium);
+  scroll-snap-type: y mandatory;
+scroll-snap-stop: always;
+overscroll-behavior: none; /* or contain */
+
+}
+
+
+html {
+  background-color: #ededed; /* Light mode default */
+}
+
+html.dark {
+  background-color: #0a0a0a;
 }
 
 :root {
