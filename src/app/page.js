@@ -109,18 +109,6 @@ export default function Home() {
   };
 
   return (
-    <ReactLenis 
-    options={{
-      duration: 1.2,
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    }} 
-    ref={lenisRef}
-  >
       <div className="snap-y snap-mandatory snap-always h-screen w-screen overflow-x-hidden overscroll-none overflow-y-scroll">
         {/* First full-screen section */}
         <div className="relative h-screen w-screen snap-start flex items-center justify-center overscroll-none bg-white dark:bg-black font-[family-name:var(--font-geist-sans)]">
@@ -157,6 +145,6 @@ export default function Home() {
           <SectionThree />
         </div>
       </div>
-    </ReactLenis>
+
   );
 }
