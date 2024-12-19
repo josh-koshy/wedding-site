@@ -32,7 +32,7 @@ export default function SectionThree() {
   const words = sentence.split(" ");
 
   return (
-    <div className="h-screen w-screen snap-start flex items-center justify-center bg-pink-300 dark:bg-black">
+    <div className="h-screen w-screen flex items-center justify-center bg-pink-300 dark:bg-black">
       <motion.div
         variants={container}
         initial="hidden"

@@ -10,14 +10,22 @@ import HeaderTextSplashScreen from "./components/HeaderTextSplashScreen";
 import { Moon, Sun } from "lucide-react";
 import SectionTwo from "./components/SectionTwo";
 import SectionThree from "./components/SectionThree";
-import { ReactLenis, useLenis } from 'lenis/react'
-import { cancelFrame, frame } from 'framer-motion';
+import { ReactLenis, useLenis } from "lenis/react";
+import { cancelFrame, frame } from "framer-motion";
 
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorVariant, setCursorVariant] = useState("default");
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // const loco = new LocomotiveScroll(); 
+
+  useEffect(() => {
+    import("locomotive-scroll").then((locomotiveModule) => {
+      scroll = new locomotiveModule.default();
+    });
+  });
 
   useEffect(() => {
     // Check if user-id cookie is set, if not, set it
@@ -83,19 +91,18 @@ export default function Home() {
     },
   };
 
-  const lenisRef = useRef()
+  const lenisRef = useRef();
 
   useEffect(() => {
     function update(time) {
-      lenisRef.current?.lenis?.raf(time)
+      lenisRef.current?.lenis?.raf(time);
     }
 
-    frame.update(update, true)
+    frame.update(update, true);
 
-    return () => cancelFrame(update)
-  }, [])
+    return () => cancelFrame(update);
+  }, []);
 
-  
   const toggleTheme = () => {
     if (document.documentElement.classList.contains("dark")) {
       document.documentElement.classList.remove("dark");
@@ -109,42 +116,42 @@ export default function Home() {
   };
 
   return (
-      <div className="snap-y snap-mandatory snap-always h-screen w-screen overflow-x-hidden overscroll-none overflow-y-scroll">
-        {/* First full-screen section */}
-        <div className="relative h-screen w-screen snap-start flex items-center justify-center overscroll-none bg-white dark:bg-black font-[family-name:var(--font-geist-sans)]">
-          {/* ... first section content ... */}
-          <button
-            onClick={toggleTheme}
-            className="absolute top-4 right-7 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-            aria-label={
-              isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-            }
-          >
-            {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
-          </button>
-          <main className="text-center">
-            <HeaderTextSplashScreen
-              onTextHoverEnter={() => setCursorVariant("text")}
-              onTextHoverLeave={() => setCursorVariant("default")}
-            />
-          </main>
-          <motion.div
-            className="pointer-events-none fixed top-0 left-0 z-50 w-3 h-3 rounded-full"
-            variants={variants}
-            animate={cursorVariant}
+    <div className="h-screen w-screen">
+      {/* First full-screen section */}
+      <div className="relative h-screen w-screen flex items-center justify-center bg-white dark:bg-black font-[family-name:var(--font-geist-sans)]">
+        {/* ... first section content ... */}
+        <button
+          onClick={toggleTheme}
+          className="absolute top-4 right-7 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          aria-label={
+            isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+          }
+        >
+          {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+        </button>
+        <main className="text-center">
+          <HeaderTextSplashScreen
+            onTextHoverEnter={() => setCursorVariant("text")}
+            onTextHoverLeave={() => setCursorVariant("default")}
           />
-        </div>
-
-        {/* Second full-screen section */}
-        <div className="h-screen w-screen snap-start flex items-center justify-center overscroll-none bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
-          <SectionTwo />
-        </div>
-
-        {/* Third full-screen section */}
-        <div className="h-screen w-screen snap-start flex items-center justify-center overscroll-none bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
-          <SectionThree />
-        </div>
+        </main>
+        <motion.div
+          className="pointer-events-none fixed top-0 left-0 z-50 w-3 h-3 rounded-full"
+          variants={variants}
+          animate={cursorVariant}
+        />
       </div>
-
+  
+      {/* Second full-screen section */}
+      <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
+        <SectionTwo />
+      </div>
+  
+      {/* Third full-screen section */}
+      <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
+        <SectionThree />
+      </div>
+    </div>
   );
+  
 }
