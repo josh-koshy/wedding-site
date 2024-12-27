@@ -3,8 +3,7 @@
 import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-
-
+import { ReactLenis, useLenis } from "lenis/react";
 
 function Character({ children, ...props }) {
   return (
@@ -31,6 +30,7 @@ export default function HeaderTextSplashScreen({
 }) {
   const text = "Josh and Rylie";
   const ctrls = useAnimation();
+
 
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -65,6 +65,7 @@ export default function HeaderTextSplashScreen({
       },
     },
   };
+
 
   return (
     <div className="text-center  text-black	 dark:text-pink-300">
@@ -115,6 +116,18 @@ export default function HeaderTextSplashScreen({
         initial={{ opacity: 0, y: 3 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 1.5 }}
+        onAnimationStart={() => {
+          console.log("July 19 Animation Started");
+          document.body.style.overflow = "hidden"; // standard no-scroll implementation
+          document.body.setAttribute("data-lenis-prevent", "true"); // Make sure you pass true as string
+        }}
+        onAnimationComplete={() => {
+          console.log("July 19 Animation Complete, Timeout Started");
+          setTimeout(function () {
+            console.log("Timeout Complete");
+            document.body.style.overflow = "auto";
+          }, 500);
+        }}
       >
         <p className="text-xl font-haasMedium">July 19, 2024</p>
       </motion.div>

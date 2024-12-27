@@ -1,4 +1,7 @@
+"use client"
+
 import { motion } from "framer-motion";
+import { ReactLenis, useLenis } from "lenis/react";
 
 const container = {
   hidden: { opacity: 0 }, // Container starts invisible
@@ -30,6 +33,7 @@ const item = {
 export default function SectionThree() {
   const sentence = "This is the third full-page section";
   const words = sentence.split(" ");
+
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-pink-300 dark:bg-black">

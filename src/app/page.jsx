@@ -89,6 +89,8 @@ export default function Home() {
   };
 
   const lenisRef = useRef();
+  const lenis = useLenis();
+
 
   useEffect(() => {
     if (!lenisRef.current) return;
@@ -101,12 +103,12 @@ export default function Home() {
     return () => {
       cancelFrame(update);
     };
-  }, []);
+  }, [lenis]);
 
   let hasUserScrolledToFirstSection = false;
   let hasUserScrolledToSecondSection = false;
   let hasUserScrolledToThirdSection = false;
-  const lenis = useLenis();
+  
 
   let curentSection = 0;
 
@@ -120,6 +122,9 @@ export default function Home() {
       lock: true, // Exponential easing
     });
   };
+
+
+
 
   useEffect(() => {
     const handleScroll = () => {

@@ -1,4 +1,7 @@
+"use client"
+
 import { motion } from "framer-motion";
+import { ReactLenis, useLenis } from "lenis/react";
 
 const container = {
   hidden: { opacity: 0 }, // Container starts invisible
@@ -31,6 +34,8 @@ export default function SectionTwo() {
   const sentence = "This is the second full-page section";
   const words = sentence.split(" ");
 
+
+
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-pink-300 dark:bg-black">
       <motion.div
@@ -40,6 +45,12 @@ export default function SectionTwo() {
         // Remove once: true, so animation can trigger multiple times
         viewport={{ once: false, amount: 0.8 }}
         className="overflow-hidden text-center"
+        onAnimationStart={() => {
+          console.log("Section 2 Animation Started");
+        }}
+        onAnimationComplete={() => {
+          console.log("Section 2 Animation Complete, Timeout Started");
+        }}
       >
         <h1 className="text-4xl font-haasMedium font-bold text-black dark:text-white flex flex-wrap justify-center">
           {words.map((word, index) => (
