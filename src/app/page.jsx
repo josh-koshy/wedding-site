@@ -5,27 +5,24 @@
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from "uuid";
-import { motion } from "framer-motion";
-import HeaderTextSplashScreen from "./components/HeaderTextSplashScreen";
+import { ReactLenis, useLenis } from "lenis/react";
+import Snap from "lenis/snap";
+import { motion, cancelFrame, frame } from "motion/react";
+
+// Icons & UI Components
 import { Moon, Sun } from "lucide-react";
+
+// Component Imports
+import HeaderTextSplashScreen from "./components/HeaderTextSplashScreen";
 import SectionTwo from "./components/SectionTwo";
 import SectionThree from "./components/SectionThree";
-import { ReactLenis, useLenis } from "lenis/react";
-import { cancelFrame, frame } from "framer-motion";
-
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorVariant, setCursorVariant] = useState("default");
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // const loco = new LocomotiveScroll(); 
-
-  useEffect(() => {
-    import("locomotive-scroll").then((locomotiveModule) => {
-      scroll = new locomotiveModule.default();
-    });
-  });
+  // const loco = new LocomotiveScroll();
 
   useEffect(() => {
     // Check if user-id cookie is set, if not, set it
@@ -92,16 +89,74 @@ export default function Home() {
   };
 
   const lenisRef = useRef();
+  const lenis = useLenis();
+
 
   useEffect(() => {
+    if (!lenisRef.current) return;
+
     function update(time) {
-      lenisRef.current?.lenis?.raf(time);
+      lenisRef.current.raf(time);
     }
 
-    frame.update(update, true);
+    frame.update(update);
+    return () => {
+      cancelFrame(update);
+    };
+  }, [lenis]);
 
-    return () => cancelFrame(update);
-  }, []);
+  let hasUserScrolledToFirstSection = false;
+  let hasUserScrolledToSecondSection = false;
+  let hasUserScrolledToThirdSection = false;
+  
+
+  let curentSection = 0;
+
+  const scrollToSection = (section) => {
+    lenis.scrollTo(section, {
+      duration: 1.5,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      onComplete: () => {
+        curentSection += 1;
+      },
+      lock: true, // Exponential easing
+    });
+  };
+
+
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY; // Distance scrolled vertically in pixels
+      const viewportHeight = window.innerHeight; // Height of the viewport
+
+      // Check if the user is within the first viewport height (0 to 1 viewport)
+      if (scrollPosition >= 65 && scrollPosition <= viewportHeight) {
+        if (!hasUserScrolledToFirstSection) {
+          console.log("User is within the first viewport!");
+          scrollToSection(".second-viewport-section");
+          hasUserScrolledToFirstSection = true;
+        }
+      }
+
+      else if (scrollPosition > (window.innerHeight + 65) && scrollPosition <= (viewportHeight * 2)) {
+        if (!hasUserScrolledToSecondSection) {
+          console.log("User is within the second viewport!");
+          scrollToSection(".third-viewport-section");
+          hasUserScrolledToSecondSection = true;
+        }
+      }
+    };
+
+    // Attach the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lenis]); // Empty dependency array ensures this runs once when the component mounts
 
   const toggleTheme = () => {
     if (document.documentElement.classList.contains("dark")) {
@@ -116,42 +171,38 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-screen">
-      {/* First full-screen section */}
-      <div className="relative h-screen w-screen flex items-center justify-center bg-white dark:bg-black font-[family-name:var(--font-geist-sans)]">
-        {/* ... first section content ... */}
-        <button
-          onClick={toggleTheme}
-          className="absolute top-4 right-7 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          aria-label={
-            isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-          }
-        >
-          {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
-        </button>
-        <main className="text-center">
-          <HeaderTextSplashScreen
-            onTextHoverEnter={() => setCursorVariant("text")}
-            onTextHoverLeave={() => setCursorVariant("default")}
-          />
-        </main>
-        <motion.div
-          className="pointer-events-none fixed top-0 left-0 z-50 w-3 h-3 rounded-full"
-          variants={variants}
-          animate={cursorVariant}
-        />
+    <ReactLenis root>
+      <div className="h-screen w-screen">
+        {/* First full-screen section */}
+        <div className="relative h-screen w-screen flex items-center justify-center bg-white dark:bg-black font-[family-name:var(--font-geist-sans)]">
+          {/* ... first section content ... */}
+          <button
+            onClick={toggleTheme}
+            className="absolute top-4 right-7 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            aria-label={
+              isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+            }
+          >
+            {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+          <main className="text-center">
+            <HeaderTextSplashScreen
+              onTextHoverEnter={() => setCursorVariant("text")}
+              onTextHoverLeave={() => setCursorVariant("default")}
+            />
+          </main>
+        </div>
+
+        {/* Second full-screen section */}
+        <div className="second-viewport-section h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
+          <SectionTwo />
+        </div>
+
+        {/* Third full-screen section */}
+        <div className="third-viewport-section h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
+          <SectionThree />
+        </div>
       </div>
-  
-      {/* Second full-screen section */}
-      <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
-        <SectionTwo />
-      </div>
-  
-      {/* Third full-screen section */}
-      <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
-        <SectionThree />
-      </div>
-    </div>
+    </ReactLenis>
   );
-  
 }
