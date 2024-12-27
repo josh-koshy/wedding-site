@@ -88,7 +88,6 @@ export default function Home() {
     },
   };
 
-
   const lenisRef = useRef();
 
   useEffect(() => {
@@ -104,33 +103,43 @@ export default function Home() {
     };
   }, []);
 
-  let hasUserScrolledOnce = false;
-  const lenis = useLenis()
+  let hasUserScrolledToFirstSection = false;
+  let hasUserScrolledToSecondSection = false;
+  let hasUserScrolledToThirdSection = false;
+  const lenis = useLenis();
 
   let curentSection = 0;
 
+  const scrollToSection = (section) => {
+    lenis.scrollTo(section, {
+      duration: 1.5,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      onComplete: () => {
+        curentSection += 1;
+      },
+      lock: true, // Exponential easing
+    });
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      if (!hasUserScrolledOnce) {
-        // Get the scroll position
-        const scrollPosition = window.scrollY; // Distance scrolled vertically in pixels
+      const scrollPosition = window.scrollY; // Distance scrolled vertically in pixels
+      const viewportHeight = window.innerHeight; // Height of the viewport
 
-        // Get the viewport height
-        const viewportHeight = window.innerHeight; // Height of the viewport
+      // Check if the user is within the first viewport height (0 to 1 viewport)
+      if (scrollPosition >= 65 && scrollPosition <= viewportHeight) {
+        if (!hasUserScrolledToFirstSection) {
+          console.log("User is within the first viewport!");
+          scrollToSection(".second-viewport-section");
+          hasUserScrolledToFirstSection = true;
+        }
+      }
 
-        // Check if the user is within the first viewport height (0 to 1 viewport)
-        if (scrollPosition >= 65 && scrollPosition <= viewportHeight) {
-
-          console.log("User is within the first viewport!")
-
-          lenis.scrollTo('.second-viewport-section', {
-          duration: 1.5,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          onComplete: () => { curentSection += 1},
-          lock: true // Exponential easing
-        })
-          
-          hasUserScrolledOnce = true;
+      else if (scrollPosition > (window.innerHeight + 65) && scrollPosition <= (viewportHeight * 2)) {
+        if (!hasUserScrolledToSecondSection) {
+          console.log("User is within the second viewport!");
+          scrollToSection(".third-viewport-section");
+          hasUserScrolledToSecondSection = true;
         }
       }
     };
@@ -185,7 +194,7 @@ export default function Home() {
         </div>
 
         {/* Third full-screen section */}
-        <div className="h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
+        <div className="third-viewport-section h-screen w-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-[family-name:var(--font-geist-sans)]">
           <SectionThree />
         </div>
       </div>
